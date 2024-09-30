@@ -7,6 +7,7 @@ export interface IUser extends Document {
   password?: string;
   bio?: string;
   role?: "hod" | "staff";
+  session?: string;
 }
 
 const UserSchema = new Schema(
@@ -17,6 +18,7 @@ const UserSchema = new Schema(
     password: { type: String, required: true },
     role: { type: String, required: true, enum: ["hod", "staff"] },
     bio: { type: String, required: false },
+    session: { type: String, required: false },
   },
   {
     timestamps: true,

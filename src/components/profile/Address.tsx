@@ -1,0 +1,30 @@
+import React from 'react'
+import { Card, CardContent } from '../ui/card'
+import { Button } from '../ui/button'
+import { PersonalInfoBlock } from './Personal'
+import { FaPenAlt } from 'react-icons/fa'
+
+const Address = () => {
+    return (
+        <Card>
+            <CardContent className='p-6'>
+                <div className='flex items-center justify-between'>
+                    <h3 className='font-bold'>Address</h3>
+                    <Button variant="outline" className='border-[1.5px] flex items-center justify-center gap-x-2'>
+                        Edit <FaPenAlt />
+                    </Button>
+                </div>
+                <div className='mt-4 w-full'>
+                    <div className='flex flex-col lg:flex-row w-full justify-between flex-wrap'>
+                        <PersonalInfoBlock title='First Name' content='Chidera' />
+                        <PersonalInfoBlock title='Last Name' content='Nnamani' />
+                        <PersonalInfoBlock title='Email' content='chiderannamani@gmail.com' />
+                        <PersonalInfoBlock title='Phone' content='+234-819-292-9299' />
+                    </div>
+                </div>
+            </CardContent>
+        </Card>
+    )
+}
+
+export default Address
