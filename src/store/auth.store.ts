@@ -19,7 +19,7 @@ export type IAuthStore = {
   updateInfo: ({ id, email, role, name, tel, bio }: TUser) => void;
 };
 
-export const useAuthStore = create<IAuthStore>((set, get) => ({
+export const useAuthStore = create<IAuthStore>((set) => ({
   id: "",
   email: "",
   name: "",

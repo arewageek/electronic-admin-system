@@ -1,4 +1,4 @@
-
+import { verifySession } from '@/actions/user.actions'
 import { ReactNode } from 'react'
 
 interface Props {
@@ -7,10 +7,6 @@ interface Props {
 }
 
 const Auth = ({ title, children }: Props) => {
-
-    // const session = await verifySession()
-    // console.log({ session })
-
 
     return (
         <div className='h-screen w-screen bg-gray-200 text-gray-800 flex items-center justify-center px-10'>

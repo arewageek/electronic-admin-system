@@ -1,7 +1,7 @@
 "use server";
 
 import { connectMongoDB } from "@/lib/db";
-import { generateToken } from "@/lib/jwtUtils";
+import { generateToken, verifyToken } from "@/lib/jwtUtils";
 import User, { IUser } from "@/models/user";
 import { UserSession } from "@/models/userSession";
 import bcrypt from "bcrypt";
@@ -100,16 +100,10 @@ export async function authenticate({
     // generate session token using jwt
     const sessionToken = generateToken(userData);
 
-    // create a salt for hashing the user session Id
-    const salt = await bcrypt.genSalt(10);
-
-    // hashing the user's session id for added security
-    const sessionId = await bcrypt.hash(sessionToken, salt);
-
     // store hashed sessionId in the database for user authentication
     const userSession = new UserSession({
       userId: user._id,
-      sessionId,
+      sessionId: sessionToken,
     });
     userSession.save();
 
@@ -129,8 +123,9 @@ export async function authenticate({
 
 export async function verifySession() {
   const cookieStore = cookies();
-  const sessionid = cookieStore.get("sessionId");
-  console.log({ sessionid });
+  const sessionId = cookieStore.get("sessionId");
+  console.log({ sessionId });
 
-  return sessionid;
+  // const session = verifyToken()
+  // const userSessionData = await UserSession.findOne({  sessionId: session });
 }

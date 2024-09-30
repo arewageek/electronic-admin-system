@@ -14,7 +14,7 @@ const StaffPage = () => {
                 <StaffOverview />
                 <AllFiles />
             </div>
-            <div className='w-full lg:w-2/5  ps-10 mt-10 lg:mt-0'>
+            <div className='w-full lg:w-2/5  lg:p-10 mt-10 lg:mt-0'>
                 <Storage />
             </div>
         </div>

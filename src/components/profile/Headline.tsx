@@ -1,10 +1,16 @@
+"use client"
+
 import React from 'react'
 import { Card, CardContent } from '../ui/card'
 import Image from 'next/image'
 import { Button } from '../ui/button'
 import { FaPenAlt } from 'react-icons/fa'
+import { useAuthStore } from '@/store/auth.store'
 
 const Headline = () => {
+
+    const { name } = useAuthStore()
+
     return (
         <Card>
             <CardContent className='p-6 flex gap-x-5'>
@@ -13,7 +19,7 @@ const Headline = () => {
                         <Image alt="avatar" src={"/images/avatar.avif"} height={200} width={200} className='rounded-full h-[100px] w-[100px]' />
                         <div>
                             <h3 className='font-bold text-xl'>
-                                Chidera Nnamani
+                                {name}
                             </h3>
                             <p className='font-bold text-gray-500 text-lg'>
                                 Lecturer

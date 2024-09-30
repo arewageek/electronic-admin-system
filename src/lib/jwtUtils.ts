@@ -10,4 +10,8 @@ export const generateToken = (payload: JwtPayload): string => {
   return token;
 };
 
-// export const
+export const verifyToken = (token: string) => {
+  const data = jwt.decode(token);
+  console.log(data);
+  return data;
+};
