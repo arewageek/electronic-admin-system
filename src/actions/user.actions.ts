@@ -1,10 +1,11 @@
 "use server";
 
 import { connectMongoDB } from "@/lib/db";
-import { generateToken, verifyToken } from "@/lib/jwtUtils";
+import { generateToken, verifyJWTToken } from "@/lib/jwtUtils";
 import User from "@/models/user";
 import { UserSession } from "@/models/userSession";
 import bcrypt from "bcrypt";
+import { cookies } from "next/headers";
 
 //  interfaces   defined to structure the user object
 interface UserProp {
@@ -127,38 +128,15 @@ export async function authenticate({
 
 export async function verifySession(
   token: string
-): Promise<{ status: 200 | 404 | 500; message: string; user?: UserInterface }> {
+): Promise<{ status: 200 | 404 | 500; message: string; user?: any }> {
   try {
-    const session = verifyToken(token);
-    const userSessionData = await UserSession.findOne({ sessionId: token });
+    // convert jwt token back to object
+    const user = verifyJWTToken(token);
 
-    console.log({ userSessionData, session });
-    if (!userSessionData)
-      return { status: 404, message: "Session does not exist" };
-    const userId = await userSessionData.userId;
-    const user = await User.findById(userId);
-    if (!user) return { status: 404, message: "User not exist" };
-    console.log({
-      userInfo: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        bio: user.bio,
-      },
-    });
-    return {
-      status: 200,
-      message: "data found",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-        bio: user.bio,
-        tel: user.tel,
-      },
-    };
+    // return an error if session id is not valid
+    if (!user) return { status: 404, message: "Session does not exist" };
+    // return user's information stored on
+    return { status: 200, message: "User session recovered", user: user };
   } catch (error) {
     console.log({ error });
     return {

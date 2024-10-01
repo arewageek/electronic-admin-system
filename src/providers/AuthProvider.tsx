@@ -9,7 +9,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [session, setSession] = useState("")
     const [user, setUser] = useState()
 
-    const { updateInfo } = useAuthStore()
+    const { updateInfo, id } = useAuthStore()
 
     useEffect(() => {
         const sess = Cookies.get("sessionId")
@@ -19,7 +19,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         console.log("start")
         console.log({ session })
-        retrieveDataFromSession()
+        id || retrieveDataFromSession()
         console.log('stop')
 
         // return () => {
