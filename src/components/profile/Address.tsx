@@ -16,10 +16,10 @@ const Address = () => {
                 </div>
                 <div className='mt-4 w-full'>
                     <div className='flex flex-col lg:flex-row w-full justify-between flex-wrap'>
-                        <PersonalInfoBlock title='First Name' content='Chidera' />
-                        <PersonalInfoBlock title='Last Name' content='Nnamani' />
-                        <PersonalInfoBlock title='Email' content='chiderannamani@gmail.com' />
-                        <PersonalInfoBlock title='Phone' content='+234-819-292-9299' />
+                        <PersonalInfoBlock title='Street' content='Street Name and number' />
+                        <PersonalInfoBlock title='City' content='Keffi' />
+                        <PersonalInfoBlock title='State' content='Nasarawa State' />
+                        <PersonalInfoBlock title='Country' content='Nigeria' />
                     </div>
                 </div>
             </CardContent>

@@ -1,6 +1,8 @@
+"use client"
+
 import React from 'react'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { FaExpand, FaExpandAlt, FaFileImage } from 'react-icons/fa'
+import { FaExpandAlt, FaFileImage } from 'react-icons/fa'
 
 const AllFiles = () => {
     const files = [

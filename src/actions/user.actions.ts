@@ -2,11 +2,11 @@
 
 import { connectMongoDB } from "@/lib/db";
 import { generateToken, verifyToken } from "@/lib/jwtUtils";
-import User, { IUser } from "@/models/user";
+import User from "@/models/user";
 import { UserSession } from "@/models/userSession";
 import bcrypt from "bcrypt";
-import { cookies } from "next/headers";
 
+//  interfaces   defined to structure the user object
 interface UserProp {
   email: string;
   name: string;
@@ -31,15 +31,18 @@ export async function createAccount({
   try {
     connectMongoDB();
 
+    // verify if user account already exist
     const user = await User.findOne({ where: { email } });
-    console.log({ user, email });
+    // return an error if user already exist
     if (user) return 400;
 
+    // generate a salt to be used for hashing user's password
     const salt = await bcrypt.genSalt(10);
 
+    // has user's password
     const hashedPassword = await bcrypt.hash(password, salt);
-    console.log({ hashedPassword });
 
+    // create a new user object
     const create = new User({
       email,
       name,
@@ -48,7 +51,7 @@ export async function createAccount({
       role: "staff",
       bio: "",
     });
-
+    // store user information in the database
     create.save();
 
     return 201;
@@ -105,6 +108,7 @@ export async function authenticate({
       userId: user._id,
       sessionId: sessionToken,
     });
+
     userSession.save();
 
     // send session and user data to application for client side storage (in cookies or state)
@@ -121,11 +125,45 @@ export async function authenticate({
   }
 }
 
-export async function verifySession() {
-  const cookieStore = cookies();
-  const sessionId = cookieStore.get("sessionId");
-  console.log({ sessionId });
+export async function verifySession(
+  token: string
+): Promise<{ status: 200 | 404 | 500; message: string; user?: UserInterface }> {
+  try {
+    const session = verifyToken(token);
+    const userSessionData = await UserSession.findOne({ sessionId: token });
 
-  // const session = verifyToken()
-  // const userSessionData = await UserSession.findOne({  sessionId: session });
+    console.log({ userSessionData, session });
+    if (!userSessionData)
+      return { status: 404, message: "Session does not exist" };
+    const userId = await userSessionData.userId;
+    const user = await User.findById(userId);
+    if (!user) return { status: 404, message: "User not exist" };
+    console.log({
+      userInfo: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        bio: user.bio,
+      },
+    });
+    return {
+      status: 200,
+      message: "data found",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        bio: user.bio,
+        tel: user.tel,
+      },
+    };
+  } catch (error) {
+    console.log({ error });
+    return {
+      status: 500,
+      message: "An error occurred verifying the user session",
+    };
+  }
 }

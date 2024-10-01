@@ -1,11 +1,16 @@
+"use client"
+
 import React from 'react'
 import { Card, CardContent } from '../ui/card'
 import { Button } from '../ui/button'
 import { FaPenAlt } from 'react-icons/fa'
+import { useAuthStore } from '@/store/auth.store'
 
 const lorem = "Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum placeat itaque quod eligendi consectetur laudantium, corrupti doloremque tenetur, officiis quisquam animi minus ipsa pariatur consequatur id omnis, velit in maxime."
 
 const PersonalInformation = () => {
+
+    const { name, email, tel, bio } = useAuthStore()
     return (
         <Card>
             <CardContent className='p-6'>
@@ -16,12 +21,11 @@ const PersonalInformation = () => {
                     </Button>
                 </div>
                 <div className='mt-4 w-full'>
-                    <div className='flex flex-col lg:flex-row w-full justify-between flex-wrap'>
-                        <PersonalInfoBlock title='First Name' content='Chidera' />
-                        <PersonalInfoBlock title='Last Name' content='Nnamani' />
-                        <PersonalInfoBlock title='Email' content='chiderannamani@gmail.com' />
-                        <PersonalInfoBlock title='Phone' content='+234-819-292-9299' />
-                        <PersonalInfoBlock title='Bio' content={lorem} full={true} />
+                    <div className='flex flex-col lg:flex-row w-full justify-between flex-wrap overflow-x-auto'>
+                        <PersonalInfoBlock title='First Name' content={name} />
+                        <PersonalInfoBlock title='Email' content={email} />
+                        <PersonalInfoBlock title='Phone' content={tel} />
+                        <PersonalInfoBlock title='Bio' content={bio} full={true} />
                     </div>
                 </div>
             </CardContent>
@@ -35,7 +39,7 @@ export const PersonalInfoBlock = ({ title, content, full }: { title: string, con
             <h3 className='text-gray-400 text-sm font-semibold'>
                 {title}
             </h3>
-            <p className="text-lg text-gray-900">
+            <p className="text-sm lg:text-lg text-gray-900">
                 {content}
             </p>
         </div>
