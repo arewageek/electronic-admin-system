@@ -9,6 +9,8 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { StaffNavList } from './nav/Staffnav'
+import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { Button } from '@/components/ui/button'
 
 
 const Appbar = () => {
@@ -16,19 +18,36 @@ const Appbar = () => {
         <>
             <div className='w-full bg-white shadow py-3 px-5 flex items-center justify-between'>
                 <div className='font-semibold'>
-                    App bar
+                    EAS
                 </div>
-                <Sheet>
-                    <SheetTrigger><HamburgerMenuIcon /></SheetTrigger>
-                    <SheetContent>
-                        <SheetHeader>
-                            <SheetTitle>Menu</SheetTitle>
-                            <SheetDescription className='pt-10'>
-                                <StaffNavList />
-                            </SheetDescription>
-                        </SheetHeader>
-                    </SheetContent>
-                </Sheet>
+
+                <div className='flex items-center gap-x-5'>
+
+                    <div>
+                        <SignedIn>
+                            <UserButton />
+                        </SignedIn>
+                        <SignedOut>
+                            <SignInButton>
+                                <Button className='bg-blue-1 rounded font-bold text-white bg-purple-600'>
+                                    Signin
+                                </Button>
+                            </SignInButton>
+                        </SignedOut>
+                    </div>
+
+                    <Sheet>
+                        <SheetTrigger className='lg:hidden'><HamburgerMenuIcon /></SheetTrigger>
+                        <SheetContent>
+                            <SheetHeader>
+                                <SheetTitle>Menu</SheetTitle>
+                                <SheetDescription className='pt-10'>
+                                    <StaffNavList />
+                                </SheetDescription>
+                            </SheetHeader>
+                        </SheetContent>
+                    </Sheet>
+                </div>
 
             </div>
 

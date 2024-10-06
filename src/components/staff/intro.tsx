@@ -2,14 +2,14 @@
 import React from 'react'
 import { FaSearch } from 'react-icons/fa'
 import { Input } from '../ui/input'
-import { useAuthStore } from '@/store/auth.store'
+import { useClerk } from '@clerk/nextjs'
 
 const StaffIntro = () => {
-    const { name } = useAuthStore()
+    const { user } = useClerk()
     return (
         <>
             <div className='font-bold text-lg'>
-                {name}'s Cloud
+                {user?.fullName}'s Cloud
             </div>
             <div className='w-full lg:w-full mt-6 pr-5'>
                 <div className='rounded-full p-0 bg-white shadow flex items-center h-fit px-4 py-2'>

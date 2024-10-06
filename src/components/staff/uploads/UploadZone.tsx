@@ -1,33 +1,38 @@
 "use client"
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import { FaFileUpload } from 'react-icons/fa'
 import Dropzone from 'react-dropzone'
 import { toast } from 'react-toastify'
+import { getFile, uploadFile } from '@/lib/storage'
+import { useAuth } from '@clerk/nextjs'
 
 const UploadZone = () => {
 
-    const handleUpload = async (file: File) => {
-        console.log({ file })
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [uploaded, setUploaded] = useState<string | null>(null);
+    const inputRef = useRef(null);
 
-        const response = await fetch(
-            `/api/upload?filename=${file.name}`,
-            {
-                method: 'POST',
-                body: file,
-            },
-        );
-        console.log({ response })
-        if (response.status == 200) {
-            toast.success("File upload successful")
+    const { userId } = useAuth()
+
+    const handleUpload = async (file: File) => {
+        try {
+            const folder = `/${userId}`;
+            const imagePath = await uploadFile(file, folder, userId!);
+            const imageUrl = await getFile(imagePath);
+            setUploaded(imageUrl);
+
+            toast.success("Upload complete")
         }
-        else {
-            toast.error("An error occurred uploading your file")
+        catch (error) {
+            toast.error("Could not upload file")
+            console.log({ error })
         }
-    }
+    };
+
 
     return (
         <Dropzone onDrop={acceptedFiles => {
-            console.log(acceptedFiles)
+            console.log({ acceptedFiles })
             handleUpload(acceptedFiles[0])
         }
         }>

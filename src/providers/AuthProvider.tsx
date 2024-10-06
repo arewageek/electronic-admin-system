@@ -6,36 +6,36 @@ import { verifySession } from '@/actions/user.actions'
 import { useAuthStore } from '@/store/auth.store'
 
 const AuthProvider = ({ children }: { children: ReactNode }) => {
-    const [session, setSession] = useState("")
-    const [user, setUser] = useState()
+    // const [session, setSession] = useState("")
+    // const [user, setUser] = useState()
 
-    const { updateInfo, id } = useAuthStore()
+    // const { updateInfo, id } = useAuthStore()
 
-    useEffect(() => {
-        const sess = Cookies.get("sessionId")
-        sess && setSession(sess)
-    }, [])
+    // useEffect(() => {
+    //     const sess = Cookies.get("sessionId")
+    //     sess && setSession(sess)
+    // }, [])
 
-    useEffect(() => {
-        console.log("start")
-        console.log({ session })
-        id || retrieveDataFromSession()
-        console.log('stop')
+    // useEffect(() => {
+    //     console.log("start")
+    //     console.log({ session })
+    //     id || retrieveDataFromSession()
+    //     console.log('stop')
 
-        // return () => {
-        // }
-    }, [session])
+    //     // return () => {
+    //     // }
+    // }, [session])
 
-    const retrieveDataFromSession = async () => {
-        const sessionData = await verifySession(session)
-        console.log({ sessionData })
-        if (sessionData?.user) {
-            const { id, name, email, tel, role, bio } = sessionData.user!
+    // const retrieveDataFromSession = async () => {
+    //     const sessionData = await verifySession(session)
+    //     console.log({ sessionData })
+    //     if (sessionData?.user) {
+    //         const { id, name, email, tel, role, bio } = sessionData.user!
 
-            updateInfo({ id, name, email, tel, role, bio })
-        }
+    //         updateInfo({ id, name, email, tel, role, bio })
+    //     }
 
-    }
+    // }
 
     return (
         <div>{children}</div>

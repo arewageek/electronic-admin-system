@@ -1,5 +1,6 @@
 "use server";
 
+import { connectMongoDB } from "@/lib/db";
 import { IUpload, Upload } from "@/models/uploads";
 import { UserSession } from "@/models/userSession";
 import { put } from "@vercel/blob";
@@ -26,7 +27,7 @@ export async function fetchUploads(): Promise<{
     const userId = await getUserId();
     const uploads = await Upload.find({ user: userId });
     console.log({ uploads, userId });
-    return { status: 200, uploads };
+    return { status: 200, uploads: uploads };
   } catch (error) {
     console.log({ error });
     return { status: 500 };
@@ -41,6 +42,28 @@ export async function getUserId(): Promise<string | null> {
     const session = await UserSession.findOne({ sessionId });
     const userId = await session.userId;
     return userId;
+  } catch (error) {
+    console.log({ error });
+    return null;
+  }
+}
+
+export async function saveUploadInDB(data: {
+  name: string;
+  type: string;
+  size: number;
+  url: string;
+  user: string;
+  approved: boolean;
+}): Promise<"success" | null> {
+  try {
+    connectMongoDB();
+    const newUpload = new Upload(data);
+
+    newUpload.save();
+
+    console.log("done");
+    return "success";
   } catch (error) {
     console.log({ error });
     return null;
