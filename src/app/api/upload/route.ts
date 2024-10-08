@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { nanoid } from "nanoid";
 import { storage } from "@/config/firebase";
 import { ref, uploadBytes } from "firebase/storage";
+import { getAuth } from "@clerk/nextjs/server";
 
 // export async function POST(request: Request): Promise<NextResponse> {
 //   try {
@@ -48,13 +49,10 @@ import { ref, uploadBytes } from "firebase/storage";
 //   }
 // }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const cc = cookies();
-    const sessionIdCookie = cc.get("sessionId");
-    const sessionId = sessionIdCookie?.value;
-    const session = await UserSession.findOne({ sessionId });
-    const userId = await session.userId;
+    const { searchParams } = new URL(request.url);
+    const userId = searchParams.get("uid");
 
     const uploads = await Upload.find({ user: userId });
     console.log({ uploads, userId });

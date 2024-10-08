@@ -19,12 +19,14 @@ export async function uploadFile(file: File) {
   console.log({ blob });
 }
 
-export async function fetchUploads(): Promise<{
+export async function fetchUploads(uid: string): Promise<{
   status: 200 | 500;
   uploads?: TUpload[];
 }> {
   try {
-    const userId = await getUserId();
+    connectMongoDB();
+
+    const userId = uid;
     const uploads = await Upload.find({ user: userId });
     console.log({ uploads, userId });
     return { status: 200, uploads: uploads };
