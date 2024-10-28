@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
 import { handleCredentialsSignin } from '@/actions/auth.actions';
+import { toast } from 'react-toastify';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -15,12 +16,22 @@ export default function Login() {
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsLoading(true)
+        try {
+            e.preventDefault();
+            setIsLoading(true)
 
-        await handleCredentialsSignin(email, password)
+            const login = await handleCredentialsSignin(email, password)
 
-        setTimeout(() => setIsLoading(false), 2000)
+            if (login?.message) throw new Error(login.message)
+
+            toast.success("Login successful")
+            setTimeout(() => setIsLoading(false), 2000)
+
+        }
+        catch (error: any) {
+            toast.error(error.message)
+            setTimeout(() => setIsLoading(false), 2000)
+        }
     };
 
     return (

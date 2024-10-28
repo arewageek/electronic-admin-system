@@ -4,7 +4,12 @@ import { signIn } from "@/auth";
 
 export async function handleCredentialsSignin(email: string, password: string) {
   try {
-    await signIn("credentials", { email, password, redirectTo: "/app/staff" });
+    const signin = await signIn("credentials", {
+      email,
+      password,
+      redirectTo: "/app/staff",
+    });
+    console.log({ signin });
   } catch (error: any) {
     switch (error.type) {
       case "CredentialsSignin":
