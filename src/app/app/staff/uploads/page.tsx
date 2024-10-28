@@ -27,7 +27,7 @@ export default function UploadsPage() {
         { id: 2, name: 'Project Proposal.docx', type: 'DOCX', size: '1.5 MB', uploadDate: '2023-12-14', status: 'Approved' },
         { id: 3, name: 'Meeting Minutes.txt', type: 'TXT', size: '0.1 MB', uploadDate: '2023-12-13', status: 'Rejected' },
     ]);
-    const [uploadingFiles, setUploadingFiles] = useState([]);
+    const [uploadingFiles, setUploadingFiles] = useState<any[]>([]);
 
     const handleDrag = (e: any) => {
         e.preventDefault();
@@ -55,34 +55,34 @@ export default function UploadsPage() {
     };
 
     const handleFiles = (fileList: any) => {
-        const newUploadingFiles = Array.from(fileList).map((file) => ({
+        const newUploadingFiles = Array.from(fileList).map((file: any) => ({
             id: Date.now() + Math.random(),
             name: file.name,
             progress: 0,
             status: 'Uploading'
         }));
-        setUploadingFiles((prev) => [...prev, ...newUploadingFiles]);
+        setUploadingFiles((prev: any) => [...prev, ...newUploadingFiles]);
 
         // Simulate file upload for each file
-        newUploadingFiles.forEach((file) => {
+        newUploadingFiles.forEach((file: any) => {
             simulateFileUpload(file);
         });
     };
 
-    const simulateFileUpload = (file) => {
+    const simulateFileUpload = (file: any) => {
         let progress = 0;
         const interval = setInterval(() => {
             progress += 10;
-            setUploadingFiles((prev: any) =>
-                prev.map((f) =>
+            setUploadingFiles((prev: any[]) =>
+                prev.map((f: any) =>
                     f.id === file.id ? { ...f, progress: Math.min(progress, 100) } : f
                 )
             );
 
             if (progress >= 100) {
                 clearInterval(interval);
-                setUploadingFiles((prev) =>
-                    prev.map((f) =>
+                setUploadingFiles((prev: any) =>
+                    prev.map((f: any) =>
                         f.id === file.id ? { ...f, status: 'Completed' } : f
                     )
                 );
@@ -100,7 +100,7 @@ export default function UploadsPage() {
                 ]);
                 // Remove the file from uploading list after a delay
                 setTimeout(() => {
-                    setUploadingFiles((prev) => prev.filter((f) => f.id !== file.id));
+                    setUploadingFiles((prev: any) => prev.filter((f: any) => f.id !== file.id));
                 }, 2000);
             }
         }, 500);
