@@ -7,15 +7,20 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
+import { handleCredentialsSignin } from '@/actions/auth.actions';
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Implement login logic
-        console.log('Login attempt with:', { email, password });
+        setIsLoading(true)
+
+        await handleCredentialsSignin(email, password)
+
+        setTimeout(() => setIsLoading(false), 2000)
     };
 
     return (
@@ -57,8 +62,8 @@ export default function Login() {
                         </div>
                     </CardContent>
                     <CardFooter className="flex flex-col space-y-4">
-                        <Button type="submit" className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white transition-all duration-300 hover:shadow-lg hover:scale-105">
-                            Login
+                        <Button disabled={isLoading} type="submit" className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white transition-all duration-300 hover:shadow-lg hover:scale-105">
+                            {isLoading ? "Loading..." : "Login"}
                         </Button>
                         <p className="text-sm text-center text-gray-600 dark:text-gray-400">
                             Don't have an account?{' '}
