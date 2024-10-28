@@ -5,9 +5,8 @@ export interface IUser extends Document {
   email: string;
   tel?: string;
   password?: string;
-  bio?: string;
-  role?: "hod" | "staff";
-  session?: string;
+  role?: string;
+  approved: boolean;
 }
 
 const UserSchema = new Schema(
@@ -16,9 +15,8 @@ const UserSchema = new Schema(
     email: { type: String, required: true, unique: true },
     tel: { type: String, required: false },
     password: { type: String, required: true },
-    role: { type: String, required: true, enum: ["hod", "staff"] },
-    bio: { type: String, required: false },
-    session: { type: String, required: false },
+    role: { type: String, required: true },
+    boolean: { type: Boolean, default: false },
   },
   {
     timestamps: true,

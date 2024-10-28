@@ -8,17 +8,34 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft } from 'lucide-react';
+import { handleNewAccountRequest } from '@/actions/auth.actions';
+import { toast } from 'react-toastify';
 
 export default function RequestAccess() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [office, setOffice] = useState('');
     const [password, setPassword] = useState('');
+    const [tel, setTel] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // TODO: Implement request access logic
-        console.log('Access request submitted:', { name, email, office, password });
+        setIsLoading(true)
+        try {
+            const res = await handleNewAccountRequest({ name, email, office, password, tel })
+            if (!res.success) {
+                toast.error(res.message)
+                setIsLoading(false)
+                return;
+            }
+            toast.success(res.message)
+            return;
+
+        }
+        catch (error: any) {
+            toast.error(error.message)
+        }
     };
 
     return (
@@ -56,10 +73,23 @@ export default function RequestAccess() {
                                 className="bg-white/50 dark:bg-gray-700/50"
                             />
                         </div>
+
                         <div className="space-y-2">
-                            <Label htmlFor="department">Department</Label>
+                            <Label htmlFor="tel">Phone Number</Label>
                             <Input
-                                id="department"
+                                id="tel"
+                                type="tel"
+                                value={tel}
+                                onChange={(e: any) => setTel(e.target.value)}
+                                required
+                                className="bg-white/50 dark:bg-gray-700/50"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="office">Office</Label>
+                            <Input
+                                id="office"
                                 value={office}
                                 onChange={(e: any) => setOffice(e.target.value)}
                                 required
@@ -67,20 +97,20 @@ export default function RequestAccess() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="reason">Reason for Access</Label>
+                            <Label htmlFor="password">Password</Label>
                             <Input
-                                type='password'
                                 id="password"
+                                type="password"
                                 value={password}
                                 onChange={(e: any) => setPassword(e.target.value)}
                                 required
-                                className="bg-white/50 dark:bg-gray-700/50 min-h-[100px]"
+                                className="bg-white/50 dark:bg-gray-700/50"
                             />
                         </div>
                     </CardContent>
                     <CardFooter className="flex flex-col space-y-4">
-                        <Button type="submit" className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white transition-all duration-300 hover:shadow-lg hover:scale-105">
-                            Submit Request
+                        <Button disabled={isLoading} type="submit" className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white transition-all duration-300 hover:shadow-lg hover:scale-105">
+                            {isLoading ? "Loading..." : "Submit Request"}
                         </Button>
                         <p className="text-sm text-center text-gray-600 dark:text-gray-400">
                             Already have an account?{' '}

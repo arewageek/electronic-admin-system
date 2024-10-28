@@ -23,7 +23,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
           const user = await User.findOne({ email });
           console.log({ user });
-          if (!user) return null;
+          if (!user) throw new Error("Account does not exist");
+
+          if (!user.approved) throw "Account not approved";
 
           const isPasswordMatch = await bcrypt.compare(
             password as string,
@@ -31,14 +33,25 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           );
 
           if (!isPasswordMatch) return null;
+
           console.log({ isPasswordMatch });
 
           return user;
         } catch (error) {
-          console.log({ error });
-          return error;
+          throw "An unknown error occurred";
         }
       },
     }),
   ],
+  jwt({ token, user }) {
+    if (user) {
+      token.id = user._id as string;
+    }
+    return token;
+  },
+
+  session({ session, token }) {
+    session.user.id = token.id;
+    return session;
+  },
 });

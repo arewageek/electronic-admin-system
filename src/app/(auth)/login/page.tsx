@@ -22,14 +22,14 @@ export default function Login() {
 
             const login = await handleCredentialsSignin(email, password)
 
-            if (login?.message) throw new Error(login.message)
+            if (!login.success) throw new Error(login.message)
 
             toast.success("Login successful")
-            setTimeout(() => setIsLoading(false), 2000)
 
+            setTimeout(() => setIsLoading(false), 2000)
         }
         catch (error: any) {
-            toast.error(error.message)
+            console.log({ error })
             setTimeout(() => setIsLoading(false), 2000)
         }
     };
