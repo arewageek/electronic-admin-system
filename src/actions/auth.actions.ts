@@ -1,6 +1,14 @@
 "use server";
 
-import { signIn } from "@/auth";
+import { signIn, signOut } from "@/auth";
+import { connectMongoDB } from "@/lib/db";
+
+interface NewAccountProps {
+  name: string;
+  email: string;
+  office: string;
+  password: string;
+}
 
 export async function handleCredentialsSignin(email: string, password: string) {
   try {
@@ -15,8 +23,31 @@ export async function handleCredentialsSignin(email: string, password: string) {
       case "CredentialsSignin":
         return { message: "Invalid credentials" };
       default: {
-        return { message: "Something went wrong" };
+        console.log({ error });
+        throw error;
+        // return { message: "Something went wrong" };
       }
     }
+  }
+}
+
+export async function signout() {
+  await signOut({ redirectTo: "/" });
+}
+
+export async function handleNewAccountRequest({
+  name,
+  email,
+  password,
+  office,
+}: NewAccountProps) {
+  try {
+    if (!name || !email || !password || !office)
+      throw new Error("Please fill in all fields first");
+
+    connectMongoDB();
+  } catch (error: any) {
+    console.log({ error });
+    return { success: false, message: error.message };
   }
 }

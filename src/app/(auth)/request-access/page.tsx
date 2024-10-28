@@ -12,13 +12,13 @@ import { ArrowLeft } from 'lucide-react';
 export default function RequestAccess() {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [department, setDepartment] = useState('');
-    const [reason, setReason] = useState('');
+    const [office, setOffice] = useState('');
+    const [password, setPassword] = useState('');
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         // TODO: Implement request access logic
-        console.log('Access request submitted:', { name, email, department, reason });
+        console.log('Access request submitted:', { name, email, office, password });
     };
 
     return (
@@ -40,7 +40,7 @@ export default function RequestAccess() {
                             <Input
                                 id="name"
                                 value={name}
-                                onChange={(e) => setName(e.target.value)}
+                                onChange={(e: any) => setName(e.target.value)}
                                 required
                                 className="bg-white/50 dark:bg-gray-700/50"
                             />
@@ -51,7 +51,7 @@ export default function RequestAccess() {
                                 id="email"
                                 type="email"
                                 value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e: any) => setEmail(e.target.value)}
                                 required
                                 className="bg-white/50 dark:bg-gray-700/50"
                             />
@@ -60,18 +60,19 @@ export default function RequestAccess() {
                             <Label htmlFor="department">Department</Label>
                             <Input
                                 id="department"
-                                value={department}
-                                onChange={(e) => setDepartment(e.target.value)}
+                                value={office}
+                                onChange={(e: any) => setOffice(e.target.value)}
                                 required
                                 className="bg-white/50 dark:bg-gray-700/50"
                             />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="reason">Reason for Access</Label>
-                            <Textarea
-                                id="reason"
-                                value={reason}
-                                onChange={(e) => setReason(e.target.value)}
+                            <Input
+                                type='password'
+                                id="password"
+                                value={password}
+                                onChange={(e: any) => setPassword(e.target.value)}
                                 required
                                 className="bg-white/50 dark:bg-gray-700/50 min-h-[100px]"
                             />
